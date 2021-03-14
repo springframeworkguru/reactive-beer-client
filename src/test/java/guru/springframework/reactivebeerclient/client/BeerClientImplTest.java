@@ -6,8 +6,11 @@ import guru.springframework.reactivebeerclient.model.BeerPagedList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -108,6 +111,18 @@ class BeerClientImplTest {
 
     @Test
     void createBeer() {
+        BeerDto beerDto = BeerDto.builder()
+                .beerName("Dogfishhead 90 Min IPA")
+                .beerStyle("IPA")
+                .upc("234848549559")
+                .price(new BigDecimal("10.99"))
+                .build();
+
+        Mono<ResponseEntity<Void>> responseEntityMono = beerClient.createBeer(beerDto);
+
+        ResponseEntity responseEntity = responseEntityMono.block();
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
     }
 
     @Test
@@ -120,3 +135,18 @@ class BeerClientImplTest {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
